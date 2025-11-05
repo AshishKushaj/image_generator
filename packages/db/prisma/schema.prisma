@@ -13,3 +13,90 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User{
+	id    				String		@id		@default(uuid())
+	username			String
+	profilepicture		String?
+	createdAt			DateTime	@default(now())
+	updatedAt			DateTime	@updatedAt
+}
+
+model Model{
+	id				String		@id		@default(uuid())
+	name 			String	
+    type  			TypeEnum
+    age 			Int
+    ethinicity 		EthinicityEnum
+    eyeColor 		EyeColorEnum
+    bald 			Boolean
+	trainingImages	TrainingImages[]
+	outputImages	OutputImages[]
+	createdAt		DateTime	@default(now())
+	updatedAt		DateTime	@updatedAt
+}
+
+
+model TrainingImages{
+	id			String 		@id		@default(uuid())
+	imageURL	String
+	modelId		String
+	model 		Model		@relation(fields: [modelId], references: [id])
+}
+
+
+model OutputImages{
+	id			String		@id		@default(uuid())
+	imageURL	String
+	userId		String
+	modelId		String
+	model		Model		@relation(fields: [modelId], references: [id])
+	createdat	DateTime	@default(now())
+	updatedat	DateTime	@updatedAt
+}
+
+model Pack{
+	id			String		@id		@default(uuid())
+	name		String
+	prompt		PackPrompt[]
+	createdAt	DateTime	@default(now())
+	updatedAt	DateTime	@updatedAt
+}
+
+
+model PackPrompt{
+	id			String		@id		@default(uuid())
+	packId		String
+	prompt		String
+	pack		Pack		@relation(fields: [packId], references: [id])
+}
+
+
+
+enum EyeColorEnum{
+	Brown
+	Blue
+	Hazel
+	Green
+	Gray
+}
+
+
+enum TypeEnum{
+	Male
+	Female
+	Others
+}
+
+
+enum EthinicityEnum{
+	SouthAsian
+	EastAsian
+	SouthEastAsian
+	MiddleEastern
+	Pacific
+	Hispanic
+	Black
+	White
+}
