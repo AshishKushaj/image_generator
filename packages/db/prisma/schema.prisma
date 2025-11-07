@@ -31,6 +31,7 @@ model Model{
     ethinicity 		EthinicityEnum
     eyeColor 		EyeColorEnum
     bald 			Boolean
+	userId			String
 	trainingImages	TrainingImages[]
 	outputImages	OutputImages[]
 	createdAt		DateTime	@default(now())
@@ -46,14 +47,22 @@ model TrainingImages{
 }
 
 
+enum OutputStatusEnum{
+	Pending
+	Completed
+	Failed
+}
+
 model OutputImages{
-	id			String		@id		@default(uuid())
+	id			String				@id		@default(uuid())
 	imageURL	String
 	userId		String
 	modelId		String
-	model		Model		@relation(fields: [modelId], references: [id])
-	createdat	DateTime	@default(now())
-	updatedat	DateTime	@updatedAt
+	model		Model				@relation(fields: [modelId], references: [id])
+	status		OutputStatusEnum	@default(Pending)
+	prompt		String
+	createdat	DateTime			@default(now())
+	updatedat	DateTime			@updatedAt
 }
 
 model Pack{
